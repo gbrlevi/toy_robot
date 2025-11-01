@@ -75,7 +75,7 @@ defmodule ToyRobot.Simulation do
     moved_robot = Robot.move(robot)
 
     case Table.valid_position?(table, moved_robot) do
-      true -> {:ok, %simulation{table | robot: moved_robot}}
+      true -> {:ok, %{simulation | robot: moved_robot}}
       false -> {:error, :at_table_boundary}
     end
   end
