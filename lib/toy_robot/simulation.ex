@@ -32,7 +32,11 @@ defmodule ToyRobot.Simulation do
     {:error, :invalid_placement}
   """
   def place(table, placement) do
-    nil
+    robot = struct(Robot, placement)
+    case Table.valid_position?(table, robot) do
+      true -> {:ok, %Simulation{table: table, robot: robot}}
+      false -> {:error, :invalid_placement}
+    end
   end
 
   @doc """
@@ -68,7 +72,12 @@ defmodule ToyRobot.Simulation do
     {:error, :at_table_boundary}
   """
   def move(%Simulation{robot: robot, table: table} = simulation) do
-    nil
+    moved_robot = Robot.move(robot)
+
+    case Table.valid_position?(table, moved_robot) do
+      true -> {:ok, %simulation{table | robot: moved_robot}}
+      false -> {:error, :at_table_boundary}
+    end
   end
 
   @doc """
@@ -94,7 +103,7 @@ defmodule ToyRobot.Simulation do
     }
   """
   def turn_left(%Simulation{robot: robot} = simulation) do
-    nil
+    {:ok, %{simulation | robot: Robot.turn_left(robot)}}
   end
 
   @doc """
@@ -120,7 +129,7 @@ defmodule ToyRobot.Simulation do
     }
   """
   def turn_right(%Simulation{robot: robot} = simulation) do
-    nil
+    {:ok, %{simulation | robot: Robot.turn_right(robot)}}
   end
 
   @doc """
@@ -140,6 +149,6 @@ defmodule ToyRobot.Simulation do
     %Robot{x: 0, y: 0, facing: :north}
   """
   def report(%Simulation{robot: robot}) do
-    nil
+    robot
   end
 end
