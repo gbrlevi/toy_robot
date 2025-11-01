@@ -20,19 +20,19 @@ defmodule ToyRobot.Robot do
   """
   def move(%Robot{facing: facing} = robot) do
     case facing do
-      :north -> %{robot | y: robot.y + 1}
-      :south -> %{robot | y: robot.y - 1}
-      :east -> %{robot | x: robot.x + 1}
-      :west -> %{robot | x: robot.x - 1}
+      :north -> move_north(robot)
+      :south -> move_south(robot)
+      :east  -> move_right(robot)
+      :west  -> move_left(robot)
     end
   end
 
   defp move_right(robot) do
-    %{robot | x: robot.x +1}
+    %{robot | x: robot.x + 1}
   end
 
   defp move_left(robot) do
-    %{robot | x: robot.x +1}
+    %{robot | x: robot.x - 1}
   end
 
   defp move_north(robot) do
@@ -40,7 +40,7 @@ defmodule ToyRobot.Robot do
   end
 
   defp move_south(robot) do
-    %{robot | y: robot.y -1}
+    %{robot | y: robot.y - 1}
   end
 
   @doc """
