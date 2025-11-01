@@ -20,7 +20,7 @@ defmodule ToyRobot.CommandRunner do
   end
 
   def run([{:invalid, _command} | rest], simulation) do
-    nil
+    run(rest, simulation)
   end
 
   def run([:move | rest], simulation) do
@@ -42,9 +42,15 @@ defmodule ToyRobot.CommandRunner do
 
   def run([:report | rest], simulation) do
     robot = Simulation.report(simulation)
-    IO.puts("#{robot.x},#{robot.y},#{robot.facing}")
+    IO.puts("O robô está na posição (#{robot.x}, #{robot.y}) apontando para o #{facing_to_name(robot.facing)}")
+
     run(rest, simulation)
   end
+
+  defp facing_to_name(:north), do: "norte"
+  defp facing_to_name(:south), do: "sul"
+  defp facing_to_name(:east), do: "leste"
+  defp facing_to_name(:west), do: "oeste"
 
   def run([], simulation) do
     simulation
