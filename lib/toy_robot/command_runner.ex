@@ -2,11 +2,16 @@ defmodule ToyRobot.CommandRunner do
   alias ToyRobot.{Simulation, Table}
 
   def run([{:place, placement} | rest]) do
-    nil
+    table = %Table{x_max: 4, y_max: 4}
+
+    case Simulation.place(table, placement) do
+      {:ok, simulation} -> run(rest, simulation)
+      {:error, _} -> run(rest)
+    end
   end
 
   def run([_command | rest]) do
-    nil
+    run(rest)
   end
 
   def run([]) do
@@ -19,22 +24,29 @@ defmodule ToyRobot.CommandRunner do
   end
 
   def run([:move | rest], simulation) do
-    nil
+    case Simulation.move(simulation) do
+      {:ok, new_simulation} -> run(rest, new_simulation)
+      {:error, :at_table_boundary} -> run(rest, simulation)
+    end
   end
 
   def run([:turn_left | rest], simulation) do
-    nil
+    {:ok, new_simulation} = Simulation.turn_left(simulation)
+    run(rest, new_simulation)
   end
 
   def run([:turn_right | rest], simulation) do
-    nil
+    {:ok, new_simulation} = Simulation.turn_right(simulation)
+    run(rest, new_simulation)
   end
 
   def run([:report | rest], simulation) do
-    nil
+    robot = Simulation.report(simulation)
+    IO.puts("#{robot.x},#{robot.y},#{robot.facing}")
+    run(rest, simulation)
   end
 
   def run([], simulation) do
-    nil
+    simulation
   end
 end
